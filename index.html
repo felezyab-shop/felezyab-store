@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>فروشگاه فلزیاب</title>
+<meta name="description" content="فروش مستقیم دستگاه‌های فلزیاب با مشخصات فنی دقیق، ثبت سفارش آنلاین و پیگیری سفارش.">
+<meta name="theme-color" content="#0d0d0e">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="فروشگاه فلزیاب">
+<meta property="og:description" content="فروش مستقیم دستگاه‌های فلزیاب با مشخصات فنی دقیق، ثبت سفارش آنلاین و پیگیری سفارش.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0d0e'/%3E%3Ccircle cx='32' cy='28' r='13' fill='none' stroke='%23d4a937' stroke-width='5'/%3E%3Cpath d='M32 41v14' stroke='%23d4a937' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="css/store.css">
+<script src="config.js"></script>
+</head>
+<body>
+<div id="demo-bar" class="demo-bar" hidden>نسخه نمایشی: محصولات، قیمت‌ها و مقاله‌ها نمونه‌اند و سفارش‌ها ارسال نمی‌شوند.</div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#home" id="brand"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="10" r="6"/><path d="M12 16v6"/></svg></i><span id="shop-name">فروشگاه فلزیاب</span></a>
+    <nav class="main" id="nav" aria-label="منوی اصلی">
+      <a href="#home" data-r="home">صفحه اصلی</a>
+      <a href="#shop" data-r="shop">فروشگاه</a>
+      <a href="#compare" data-r="compare">مقایسه</a>
+      <a href="#articles" data-r="articles">مقاله‌ها</a>
+      <a href="#guide" data-r="guide">راهنمای خرید</a>
+      <a href="#track" data-r="track">پیگیری سفارش</a>
+      <a href="#about" data-r="about">درباره ما</a>
+      <a href="#contact" data-r="contact">تماس با ما</a>
+    </nav>
+    <div class="top-actions">
+      <a class="btn btn-sm cartbtn" href="#cart" aria-label="سبد خرید"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11l2-8H6"/></svg><span>سبد</span><b id="cart-count" aria-live="polite">۰</b></a>
+      <button class="btn btn-sm menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav">منو</button>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="wrap" tabindex="-1"><div class="loading">در حال بارگذاری…</div></main>
+
+<footer class="bot">
+  <div class="wrap">
+    <div class="cols">
+      <div><h3 id="f-name">فروشگاه فلزیاب</h3><p>فروش مستقیم دستگاه‌های فلزیاب از فروشنده به مشتری.</p></div>
+      <div><h3>دسترسی سریع</h3><ul><li><a href="#shop">فروشگاه</a></li><li><a href="#guide">راهنمای خرید</a></li><li><a href="#terms">قوانین و شرایط خرید</a></li><li><a href="#track">پیگیری سفارش</a></li></ul></div>
+      <div><h3>تماس</h3><ul id="f-contact"></ul></div>
+    </div>
+    <p class="small" style="margin-top:18px">خرید، نگهداری و استفاده از دستگاه فلزیاب باید مطابق قوانین محل فعالیت و استفاده باشد. <span id="f-license"></span></p>
+  </div>
+</footer>
+<div class="float" id="float"></div>
+<script src="js/demo-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
