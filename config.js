@@ -3,8 +3,7 @@
    برای نسخه‌ی واقعی، این دو مقدار را از Supabase (Project Settings ← API) کپی کنید.
    ⚠ فقط «Publishable key» (یا anon) را بنویسید. کلید secret یا service_role هرگز نباید اینجا باشد. */
 window.STORE_CONFIG = {
-  supabaseUrl: 
- "  https://mmiqvpfkzkmyecwedrak.supabase.co// "
-  supabaseKey:"sb_publishable_nMwtHvaseUXa2dqO4HiLQA_HVXKfyGL  "
-  // demo: true      // برای دیدن دوباره‌ی نسخه‌ی نمایشی روی سایت متصل (فقط آزمایش)
-};
+ supabaseUrl: "https://mmiqvpfkzkmyecwedrak.supabase.co",
+  supabaseKey: "sb_publishable_nMwthvaseUXa2dqO4HiLQA_HVXKfyGL",
+  demo: false
+}; 
