@@ -84,7 +84,21 @@
   /* ───────── سبد و مقایسه ───────── */
   var cart = lsGet('fl_cart', []).filter(function (x) { return x && typeof x.id === 'string' && x.qty > 0; });
   var cmp = lsGet('fl_cmp', []);
-  function saveCart() { lsSet('fl_cart', cart); var n = cart.reduce(function (a, b) { return a + b.qty; }, 0); $('#cart-count').textContent = fa(n); }
+  }
+function saveCart() {
+  lsSet('fl_cart', cart);
+
+  var n = cart.reduce(function (a, b) {
+    return a + b.qty;
+  }, 0);
+
+  var counter = $('#cart-count');
+
+  if (counter) {
+    counter.textContent = fa(n);
+  }
+}
+
   function cartAdd(id, n) {
     var p = prod(id); if (!p) return;
     var line = cart.filter(function (x) { return x.id === id; })[0];
