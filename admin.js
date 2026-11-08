@@ -69,10 +69,7 @@ function showLogin(msg) {
     fetch(URL_ + '/auth/v1/token?grant_type=password', {
       method: 'POST',
       headers: { apikey: KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: f.email.value.trim(),
-        password: f.password.value
-      })
+      body: JSON.stringify({ email: f.email.value.trim(), password: f.password.value })
     })
       .then(function (r) {
         return r.json().then(function (j) {
@@ -80,17 +77,15 @@ function showLogin(msg) {
           return j;
         });
       })
-   .then(function (r) {
-  return r.json().catch(function () { return {}; }).then(function (j) {
-    if (!r.ok) {
-      throw new Error(j.msg || j.message || j.error_description || j.error || 'HTTP ' + r.status);
-    }
-    er.textContent = 'درخواست ارسال شد. ایمیلت را بررسی کن.';
+      .then(function (j) {
+        saveSess({ access_token: j.access_token, refresh_token: j.refresh_token, email: f.email.value.trim() });
+        start();
+      })
+      .catch(function () {
+        er.textContent = 'ایمیل یا رمز اشتباه است.';
+      });
   });
-})
-.catch(function (err) {
-  er.textContent = 'خطای واقعی: ' + err.message;
-});  
+
   $('#forgot-password').addEventListener('click', function () {
     var email = $('#login').elements.email.value.trim();
     var er = $('#login-err');
@@ -106,11 +101,13 @@ function showLogin(msg) {
       body: JSON.stringify({ email: email })
     })
       .then(function (r) {
-        if (!r.ok) throw new Error('recovery failed');
-        er.textContent = 'اگر این ایمیل ثبت شده باشد، لینک بازیابی برایتان ارسال می‌شود.';
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          if (!r.ok) throw new Error(j.msg || j.message || j.error_description || j.error || 'HTTP ' + r.status);
+          er.textContent = 'اگر این ایمیل ثبت شده باشد، لینک بازیابی برایتان ارسال می‌شود.';
+        });
       })
-      .catch(function () {
-        er.textContent = 'ارسال لینک ناموفق بود. دوباره تلاش کنید.';
+      .catch(function (err) {
+        er.textContent = 'خطای واقعی: ' + (err.message || 'خطای نامشخص');
       });
   });
 }
