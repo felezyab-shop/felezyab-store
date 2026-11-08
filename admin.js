@@ -1,3 +1,4 @@
+
 /* پنل مدیریت فروشگاه. فقط با «کلید عمومی» و ورود مدیر (ایمیل و رمز Supabase) کار می‌کند.
    دسترسی واقعی را قفل‌های پایگاه داده (RLS) کنترل می‌کنند، نه این صفحه. */
 (function () {
@@ -91,7 +92,9 @@ function showLogin(msg) {
         er.textContent = 'ایمیل یا رمز اشتباه است.';
       });
   });
-
+.catch(function (err) {
+  er.textContent = 'خطای ارسال: ' + (err.message || 'خطای نامشخص');
+});
   $('#forgot-password').addEventListener('click', function () {
     var email = $('#login').elements.email.value.trim();
     var er = $('#login-err');
