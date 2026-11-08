@@ -81,23 +81,28 @@
   var S = function (k) { return (D.settings && D.settings[k]) || ''; };
   var discount = function (p) { return p.old_price && p.old_price > p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0; };
 
+ 
   /* ───────── سبد و مقایسه ───────── */
-  var cart = lsGet('fl_cart', []).filter(function (x) { return x && typeof x.id === 'string' && x.qty > 0; });
+  var cart = lsGet('fl_cart', []).filter(function (x) {
+    return x && typeof x.id === 'string' && x.qty > 0;
+  });
+
   var cmp = lsGet('fl_cmp', []);
+
+  function saveCart() {
+    lsSet('fl_cart', cart);
+
+    var n = cart.reduce(function (a, b) {
+      return a + b.qty;
+    }, 0);
+
+    var counter = $('#cart-count');
+
+    if (counter) {
+      counter.textContent = fa(n);
+    }
   }
-function saveCart() {
-  lsSet('fl_cart', cart);
 
-  var n = cart.reduce(function (a, b) {
-    return a + b.qty;
-  }, 0);
-
-  var counter = $('#cart-count');
-
-  if (counter) {
-    counter.textContent = fa(n);
-  }
-}
 
   function cartAdd(id, n) {
     var p = prod(id); if (!p) return;
