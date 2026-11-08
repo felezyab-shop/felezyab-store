@@ -80,21 +80,17 @@ function showLogin(msg) {
           return j;
         });
       })
-      .then(function (j) {
-        saveSess({
-          access_token: j.access_token,
-          refresh_token: j.refresh_token,
-          email: f.email.value.trim()
-        });
-        start();
-      })
-      .catch(function () {
-        er.textContent = 'ایمیل یا رمز اشتباه است.';
-      });
+   .then(function (r) {
+  return r.json().catch(function () { return {}; }).then(function (j) {
+    if (!r.ok) {
+      throw new Error(j.msg || j.message || j.error_description || j.error || 'HTTP ' + r.status);
+    }
+    er.textContent = 'درخواست ارسال شد. ایمیلت را بررسی کن.';
   });
+})
 .catch(function (err) {
-  er.textContent = 'خطای ارسال: ' + (err.message || 'خطای نامشخص');
-});
+  er.textContent = 'خطای واقعی: ' + err.message;
+});  
   $('#forgot-password').addEventListener('click', function () {
     var email = $('#login').elements.email.value.trim();
     var er = $('#login-err');
