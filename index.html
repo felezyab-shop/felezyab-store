@@ -4,36 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="فروشگاه تخصصی فلزیاب">
     <title>فروشگاه فلزیاب</title>
     <link rel="stylesheet" href="store.css">
 </head>
 <body>
+
     <header>
         <div class="wrap">
-            <h1>فروشگاه فلزیاب</h1>
+            <h1 id="shop-name">فروشگاه فلزیاب</h1>
+
             <nav id="nav">
                 <a href="#shop">فروشگاه</a>
                 <a href="#compare">مقایسه</a>
                 <a href="#cart">سبد خرید</a>
             </nav>
+
             <div class="top-actions">
-                <a class="btn btn-sm cartbtn" href="#cart">سبد خرید</a>
-                <button class="btn btn-sm menu-btn" id="menu-btn" type="button">منو</button>
+                <a class="btn btn-sm cartbtn" href="#cart">
+                    سبد خرید
+                    <span id="cart-count">۰</span>
+                </a>
+
+                <button class="btn btn-sm menu-btn"
+                        id="menu-btn"
+                        type="button">
+                    منو
+                </button>
             </div>
         </div>
     </header>
 
+    <div class="wrap" id="demo-bar" hidden>
+        فروشگاه در حالت نمایشی قرار دارد.
+    </div>
+
     <main id="app" class="wrap">
-        <div class="loading">در حال بارگذاری اطلاعات فروشگاه...</div>
+        <div class="loading">
+            در حال بارگذاری اطلاعات فروشگاه...
+        </div>
     </main>
 
     <footer class="bot">
         <div class="wrap">
             <div class="cols">
+
                 <div>
-                    <h3>فروشگاه فلزیاب</h3>
-                    <p>فروش مستقیم دستگاه‌های فلزیاب از فروشنده به مشتری.</p>
+                    <h3 id="f-name">فروشگاه فلزیاب</h3>
+                    <p>
+                        فروش مستقیم دستگاه‌های فلزیاب از فروشنده به مشتری.
+                    </p>
+                    <p id="f-license"></p>
                 </div>
+
                 <div>
                     <h3>دسترسی سریع</h3>
                     <ul>
@@ -42,10 +65,12 @@
                         <li><a href="#terms">قوانین و شرایط خرید</a></li>
                     </ul>
                 </div>
+
                 <div>
                     <h3>تماس با ما</h3>
-                    <div id="f-contact"></div>
+                    <ul id="f-contact"></ul>
                 </div>
+
             </div>
         </div>
     </footer>
@@ -55,5 +80,6 @@
     <script src="config.js"></script>
     <script src="demo-data.js"></script>
     <script src="app.js"></script>
+
 </body>
 </html>
