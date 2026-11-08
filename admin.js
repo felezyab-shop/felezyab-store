@@ -52,20 +52,70 @@
   var note = function (el, msg, good) { el.textContent = msg; el.className = good ? 'ok-msg' : 'err'; };
 
   /* ───────── ورود ───────── */
-  function showLogin(msg) {
-    $('#logout').hidden = true;
-    root.innerHTML = '<form class="form cart-box" id="login" style="padding:18px;max-width:420px;margin:30px auto"><h1 style="font-size:1.4rem">ورود مدیر</h1>' +
-      '<label>ایمیل<input class="in ltr" type="email" name="email" autocomplete="username" required dir="ltr"></label>' +
-      '<label>رمز عبور<input class="in ltr" type="password" name="password" autocomplete="current-password" required dir="ltr"></label>' +
-      '<div class="err" id="login-err" role="alert">' + esc(msg || '') + '</div><button class="btn btn-gold" type="submit">ورود</button></form>';
-    $('#login').addEventListener('submit', function (e) {
-      e.preventDefault(); var f = e.target.elements, er = $('#login-err'); er.textContent = '';
-      fetch(URL_ + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: f.email.value.trim(), password: f.password.value }) })
-        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error('bad'); return j; }); })
-        .then(function (j) { saveSess({ access_token: j.access_token, refresh_token: j.refresh_token, email: f.email.value.trim() }); start(); })
-        .catch(function () { er.textContent = 'ایمیل یا رمز اشتباه است.'; });
-    });
-  }
+
+function showLogin(msg) {
+  $('#logout').hidden = true;
+  root.innerHTML = '<form class="form cart-box" id="login" style="padding:18px;max-width:420px;margin:30px auto"><h1 style="font-size:1.4rem">ورود مدیر</h1>' +
+    '<label>ایمیل<input class="in ltr" type="email" name="email" autocomplete="username" required dir="ltr"></label>' +
+    '<label>رمز عبور<input class="in ltr" type="password" name="password" autocomplete="current-password" required dir="ltr"></label>' +
+    '<div class="err" id="login-err" role="alert">' + esc(msg || '') + '</div><button class="btn btn-gold" type="submit">ورود</button>' +
+    '<button class="btn" type="button" id="forgot-password" style="margin-top:12px">فراموشی رمز عبور</button></form>';
+
+  $('#login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target.elements, er = $('#login-err');
+    er.textContent = '';
+    fetch(URL_ + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { apikey: KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: f.email.value.trim(),
+        password: f.password.value
+      })
+    })
+      .then(function (r) {
+        return r.json().then(function (j) {
+          if (!r.ok) throw new Error('bad');
+          return j;
+        });
+      })
+      .then(function (j) {
+        saveSess({
+          access_token: j.access_token,
+          refresh_token: j.refresh_token,
+          email: f.email.value.trim()
+        });
+        start();
+      })
+      .catch(function () {
+        er.textContent = 'ایمیل یا رمز اشتباه است.';
+      });
+  });
+
+  $('#forgot-password').addEventListener('click', function () {
+    var email = $('#login').elements.email.value.trim();
+    var er = $('#login-err');
+    if (!email) {
+      er.textContent = 'ابتدا ایمیل خود را وارد کنید.';
+      return;
+    }
+    er.textContent = 'در حال ارسال درخواست...';
+    var redirectTo = location.origin + location.pathname;
+    fetch(URL_ + '/auth/v1/recover?redirect_to=' + encodeURIComponent(redirectTo), {
+      method: 'POST',
+      headers: { apikey: KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('recovery failed');
+        er.textContent = 'اگر این ایمیل ثبت شده باشد، لینک بازیابی برایتان ارسال می‌شود.';
+      })
+      .catch(function () {
+        er.textContent = 'ارسال لینک ناموفق بود. دوباره تلاش کنید.';
+      });
+  });
+}
+
   $('#logout').addEventListener('click', function () { saveSess(null); showLogin(''); });
 
   /* ───────── چارچوب ───────── */
@@ -287,5 +337,74 @@
     }).catch(function (e) { $('#sf').innerHTML = '<div class="err">' + esc(emsg(e)) + '</div>'; });
   }
 
-  if (sess && sess.access_token) start(); else showLogin('');
+  function showRecovery(token) {
+    history.replaceState(null, '', location.pathname + location.search);
+    $('#logout').hidden = true;
+
+    root.innerHTML =
+      '<form class="form cart-box" id="recovery-form" style="padding:18px;max-width:420px;margin:30px auto">' +
+      '<h1 style="font-size:1.4rem">تعیین رمز جدید</h1>' +
+      '<label>رمز جدید<input class="in ltr" type="password" name="password" minlength="6" required dir="ltr"></label>' +
+      '<label>تکرار رمز جدید<input class="in ltr" type="password" name="confirm" minlength="6" required dir="ltr"></label>' +
+      '<div class="err" id="recovery-err" role="alert"></div>' +
+      '<button class="btn btn-gold" type="submit">ذخیره رمز جدید</button></form>';
+
+    $('#recovery-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = e.target.elements;
+      var er = $('#recovery-err');
+
+      if (f.password.value.length < 6) {
+        er.textContent = 'رمز باید حداقل ۶ کاراکتر باشد.';
+        return;
+      }
+      if (f.password.value !== f.confirm.value) {
+        er.textContent = 'تکرار رمز با رمز جدید یکسان نیست.';
+        return;
+      }
+
+      er.textContent = 'در حال ذخیره رمز جدید...';
+
+      fetch(URL_ + '/auth/v1/user', {
+        method: 'PUT',
+        headers: {
+          apikey: KEY,
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password: f.password.value })
+      })
+      .then(function (r) {
+        return r.json().then(function (j) {
+          if (!r.ok) throw new Error(j.message || j.msg || 'خطا در تغییر رمز');
+          return j;
+        });
+      })
+      .then(function () {
+        saveSess(null);
+        showLogin('رمز جدید با موفقیت ذخیره شد. اکنون وارد شوید.');
+      })
+      .catch(function (err) {
+        er.textContent = err.message || 'تغییر رمز انجام نشد. لینک ممکن است منقضی شده باشد.';
+      });
+    });
+  }
+
+  var recoveryParams = new URLSearchParams(location.hash.substring(1));
+  var recoveryToken = recoveryParams.get('access_token');
+  var recoveryType = recoveryParams.get('type');
+  var recoveryError = recoveryParams.get('error_code');
+
+  if (recoveryType === 'recovery' && recoveryToken) {
+    showRecovery(recoveryToken);
+  } else if (recoveryError === 'otp_expired') {
+    history.replaceState(null, '', location.pathname + location.search);
+    showLogin('لینک بازیابی منقضی شده است. دوباره درخواست لینک کنید.');
+    } else if (sess && sess.access_token) {
+    start();
+  } else {
+    showLogin('');
+  }
 })();
+
+ 
